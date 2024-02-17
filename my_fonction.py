@@ -13,5 +13,5 @@ def afficher():
     Bet1 = entry_Bet1.get()
     BetX = entry_BetX.get()
     Bet2 = entry_Bet2.get()
-    result_label.config(text=f"1: {Bet1}, X: {BetX}, 2: {Bet2}")
+    result_label.config(text=f"1: {Bet1} X: {BetX} 2: {Bet2}")
  

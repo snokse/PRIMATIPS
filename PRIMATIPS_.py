@@ -37,7 +37,7 @@ frame.pack(expand=YES)
 """
 # Label and Entry for Titre 
 Titre=Label(Mywindow,text="Welcome to PRIMATIPS BET", fg="#000", bg="#FFF", font=("courrier,52"))
-Titre.grid(row=0, columnspan=2, column=3)
+Titre.grid(row=0, columnspan=1, column=3)
 
 # Label and Entry for LOGO 
 img= PhotoImage(file="IMG/PRIMATIPS_LOGO.png").zoom(32).subsample(32)
@@ -46,26 +46,29 @@ canvas.create_image(132/2,119/2,image=img)
 canvas.grid(row=1, columnspan=2, column=3)
 
 # Label and Entry for 1
-Label(Mywindow, text="1", fg="white", bg="#165e8e", font=("courier", 16)).grid(row=2, column=0)
+Label(Mywindow, text="1", fg="white", bg="#165e8e", font=("courier", 16)).grid(row=2, column=1)
 my_fonction.entry_Bet1 = Entry(Mywindow)
-my_fonction.entry_Bet1.grid(row=2, column=1)
+my_fonction.entry_Bet1.grid(row=2, column=2)
 
 # Label and Entry for X
-Label(Mywindow, text="X", fg="white", bg="#165e8e", font=("courier", 16)).grid(row=3, column=0)
+Label(Mywindow, text="X", fg="white", bg="#165e8e", font=("courier", 16)).grid(row=3, column=1)
 my_fonction.entry_BetX = Entry(Mywindow)
-my_fonction.entry_BetX.grid(row=3, column=1)
+my_fonction.entry_BetX.grid(row=3, column=2)
 
 # Label and Entry for 2
-Label(Mywindow, text="2", fg="white", bg="#165e8e", font=("courier", 16)).grid(row=4, column=0)
+Label(Mywindow, text="2", fg="white", bg="#165e8e", font=("courier", 16)).grid(row=4, column=1)
 my_fonction.entry_Bet2 = Entry(Mywindow)
-my_fonction.entry_Bet2.grid(row=4, column=1)
+my_fonction.entry_Bet2.grid(row=4, column=2)
 
 # Button to display the entered values
-Button(text="Afficher", command=my_fonction.afficher).grid(row=5, columnspan=1)
+Button(text="Afficher", command=my_fonction.afficher).grid(row=5, columnspan=1, column=2)
 
 # Label to display the entered values
-my_fonction.result_label = Label(Mywindow, text="", font=("Arial", 12))
+frame=Frame(Mywindow, bg="#FFF" ,width=300, height=300)
+
+my_fonction.result_label = Label(frame, text="", font=("Arial", 12))
 my_fonction.result_label.grid(row=6, columnspan=1)
 
+frame.grid(row=6, column=2, columnspan=1)
 
 Mywindow.mainloop()
