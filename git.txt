@@ -13,7 +13,7 @@ git branch -M main
 git push -u origin main
 
 or
-git branch -M main
+
 git pull
 
 
