@@ -1,0 +1,19 @@
+git config --global user.email "snokse3@gmail.com"
+git config --global user.name "snokse"
+
+git status
+
+git init
+
+git add .
+git commit -m "commentaire1"
+
+git remote add origin https://github.com/snokse/PRIMATIPS.git
+git branch -M main
+git push -u origin main
+
+or
+git branch -M main
+git pull
+
+
