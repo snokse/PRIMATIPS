@@ -59,3 +59,14 @@ print(m.pow(3,3))
 print(rand.random())
 print(ord("a"))
 
+
+arr = [1,2,3]
+arr.append("Ahmed")
+print(arr)
+
+names = []
+ nbr = 0
+
+if nbr<5 :
+      names.append()
+
