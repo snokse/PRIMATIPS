@@ -20,10 +20,10 @@ try:
     sql_RES_2="SELECT RF FROM primatips_table WHERE BET_2 LIKE '4.2'"
     
     mycursor.execute(sql_RES_1)
-    RES_1 = mycursor.fetchall()
+    RES_BET_1 = mycursor.fetchall()
     #print("connected")
 
-    for RF in RES_1:
+    for RF in RES_BET_1:
         print(RF)
     # mydb.commit()
 except mysql.connector.Error as r:
@@ -69,13 +69,13 @@ frame=Frame(Mywindow, bg="#FFF" ,width=300, height=300)
 
 Label(frame, text="1 - X - 2 - 1X2 - 1X - 12 - X2", fg="white", bg="#165e8e", font=("courier", 16)).grid(row=5, column=2)
 
-my_fonction.result_label1 = Label(frame, text="", font=("Arial", 12))
+my_fonction.result_label1 = Label(frame, text="1", font=("Arial", 12))
 my_fonction.result_label1.grid(row=6, columnspan=1)
 
-my_fonction.result_labelX = Label(frame, text="", font=("Arial", 12))
+my_fonction.result_labelX = Label(frame, text="X", font=("Arial", 12))
 my_fonction.result_labelX.grid(row=7, columnspan=1)
 
-my_fonction.result_label2 = Label(frame, text="", font=("Arial", 12))
+my_fonction.result_label2 = Label(frame, text="2", font=("Arial", 12))
 my_fonction.result_label2.grid(row=8, columnspan=1)
 
 
