@@ -16,16 +16,23 @@ try:
     )
 
     mycursor = mydb.cursor()
-    # sql_RES_1=f"SELECT COUNT(RF) FROM primatips_table WHERE BET_1 LIKE '{my_fonction.Bet1}'"
-    sql_RES_1="SELECT COUNT(BET_1) FROM primatips_table WHERE BET_1 LIKE '1.9' AND RF LIKE '1'"
-    sql_RES_X="SELECT RF FROM primatips_table WHERE BET_X LIKE '3.2'"
+    sql_RES_1_1=f"SELECT COUNT(RF) FROM primatips_table WHERE BET_1 LIKE '1.9' AND RF LIKE '1'"
+    sql_RES_1_X=f"SELECT COUNT(RF) FROM primatips_table WHERE BET_1 LIKE '1.9' AND RF LIKE 'X'"
+    sql_RES_1_2=f"SELECT COUNT(RF) FROM primatips_table WHERE BET_1 LIKE '1.9' AND RF LIKE '2'"
+    sql_RES_1_1X2=f"SELECT COUNT(RF) FROM primatips_table WHERE BET_1 LIKE '1.9' AND BET_X LIKE '3.4'  AND BET_2 LIKE '4' AND RF LIKE '1'"
     sql_RES_2="SELECT RF FROM primatips_table WHERE BET_2 LIKE '4.2'"
     
-    mycursor.execute(sql_RES_1)
-    RES_BET_1 = mycursor.fetchall()
+    mycursor.execute(sql_RES_1_1)
+    RES_BET_1_1 = mycursor.fetchone()
+    mycursor.execute(sql_RES_1_X)
+    RES_BET_1_X = mycursor.fetchone()
+    mycursor.execute(sql_RES_1_2)
+    RES_BET_1_2 = mycursor.fetchone()
+    mycursor.execute(sql_RES_1_1X2)
+    RES_BET_1_1X2 = mycursor.fetchone()
     # print("connected")
 
-    for RF in RES_BET_1:
+    for RF in RES_BET_1_1:
         print(RF)
     # mydb.commit()
 except mysql.connector.Error as r:
@@ -74,27 +81,27 @@ cadre.grid(row=9, column=2, padx=2, pady=2)
 
 for i in range(4):
     for j in range(8):
-        if i==1 and j==0:
+        if i==0 and j==1:
             my_fonction.result_label1 = Label(cadre, text="1",
                                                   font=("Arial", 12),relief="groove", borderwidth=10) 
             my_fonction.result_label1.grid(row=i, column=j, padx=2, pady=2, columnspan=1)    
-        if i==2 and j==0:
+        if i==0 and j==2:
             my_fonction.result_labelX = Label(cadre, text="X",
                                                   font=("Arial", 12),relief="groove", borderwidth=10) 
             my_fonction.result_labelX.grid(row=i, column=j, padx=2, pady=2, columnspan=1)  
-        if i==3 and j==0:
-            my_fonction.result_label2 = Label(cadre, text="X",
+        if i==0 and j==3:
+            my_fonction.result_label2 = Label(cadre, text="2",
                                                   font=("Arial", 12),relief="groove", borderwidth=10) 
             my_fonction.result_label2.grid(row=i, column=j, padx=2, pady=2, columnspan=1)  
-        if i==0 and j==1:
+        if i==1 and j==0:
             label = tk.Label(cadre, text="1",
                        relief="groove", borderwidth=10)
             label.grid(row=i, column=j, padx=2, pady=2)  
-        if i==0 and j==2:
+        if i==2 and j==0:
             label = tk.Label(cadre, text="X",
                        relief="groove", borderwidth=10)
             label.grid(row=i, column=j, padx=2, pady=2)  
-        if i==0 and j==3:
+        if i==3 and j==0:
             label = tk.Label(cadre, text="2",
                        relief="groove", borderwidth=10)
             label.grid(row=i, column=j, padx=2, pady=2)  
@@ -115,7 +122,19 @@ for i in range(4):
                        relief="groove", borderwidth=10)
             label.grid(row=i, column=j, padx=2, pady=2) 
         if i==1 and j==1:
-            label = tk.Label(cadre, text=f"{RF}",
+            label = tk.Label(cadre, text=f"{RES_BET_1_1}",
+                       relief="groove", borderwidth=10)
+            label.grid(row=i, column=j, padx=2, pady=2) 
+        if i==2 and j==1:
+            label = tk.Label(cadre, text=f"{RES_BET_1_X}",
+                       relief="groove", borderwidth=10)
+            label.grid(row=i, column=j, padx=2, pady=2) 
+        if i==3 and j==1:
+            label = tk.Label(cadre, text=f"{RES_BET_1_2}",
+                       relief="groove", borderwidth=10)
+            label.grid(row=i, column=j, padx=2, pady=2) 
+        if i==1 and j==4:
+            label = tk.Label(cadre, text=f"{RES_BET_1_1X2}",
                        relief="groove", borderwidth=10)
             label.grid(row=i, column=j, padx=2, pady=2) 
 frame.grid(row=10, column=2, columnspan=1)
