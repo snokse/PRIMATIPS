@@ -12,15 +12,15 @@ try:
         host="localhost",
         user="root",
         passwd="",
-        database= "primatips_db"
+        database= "primatips"
     )
 
     mycursor = mydb.cursor()
-    sql_RES_1_1=f"SELECT COUNT(RF) FROM primatips_table WHERE BET_1 LIKE '1.9' AND RF LIKE '1'"
-    sql_RES_1_X=f"SELECT COUNT(RF) FROM primatips_table WHERE BET_1 LIKE '1.9' AND RF LIKE 'X'"
-    sql_RES_1_2=f"SELECT COUNT(RF) FROM primatips_table WHERE BET_1 LIKE '1.9' AND RF LIKE '2'"
-    sql_RES_1_1X2=f"SELECT COUNT(RF) FROM primatips_table WHERE BET_1 LIKE '1.9' AND BET_X LIKE '3.4'  AND BET_2 LIKE '4' AND RF LIKE '1'"
-    sql_RES_2="SELECT RF FROM primatips_table WHERE BET_2 LIKE '4.2'"
+    sql_RES_1_1=f"SELECT COUNT(RESULTAT) FROM primatips_table WHERE BET1 LIKE '1.9' AND RESULTAT LIKE '1'"
+    sql_RES_1_X=f"SELECT COUNT(RESULTAT) FROM primatips_table WHERE BET1 LIKE '1.9' AND RESULTAT LIKE 'X'"
+    sql_RES_1_2=f"SELECT COUNT(RESULTAT) FROM primatips_table WHERE BET1 LIKE '1.9' AND RESULTAT LIKE '2'"
+    sql_RES_1_1X2=f"SELECT COUNT(RESULTAT) FROM primatips_table WHERE BET1 LIKE '1.9' AND BETX LIKE '3.4'  AND BET2 LIKE '4' AND RESULTAT LIKE '1'"
+    sql_RES_2="SELECT RESULTAT FROM primatips_table WHERE BET2 LIKE '4.2'"
     
     mycursor.execute(sql_RES_1_1)
     RES_BET_1_1 = mycursor.fetchone()
@@ -40,9 +40,10 @@ except mysql.connector.Error as r:
 # Créer la fenêtre principale
 Mywindow = tk.Tk()
 Mywindow.geometry("780x580")
-Mywindow.title("PRIMATIPS BET")
+Mywindow.title("PRIMATIPS BETT")
 Mywindow.config(background="#165e8e")
 Mywindow.iconbitmap("IMG/PRIMATIPS_ICO.ico")
+
 
 
 # Label and Entry for Titre 
