@@ -1,63 +1,75 @@
+import sqlite3
 import tkinter as tk
-import mysql.connector
-import tkinter.ttk as ttk
+from tkinter import ttk
+# from tkinter.ttk import Treeview
+# from tkinter.ttk import Label
+# "https://drive.google.com/file/d/1vCAOqLPDK4p1483FndCnOqBPuOzbmOOd/view?usp=sharing"
 
+def create_database():
+    global db_name, table_name
+    db_name = "DB/primatips4.sqlite"
+    table_name = "primatips_table"
+    conn = sqlite3.connect(db_name)
+    c = conn.cursor()
+    conn.commit()
+    conn.close()
 
-# MySQL connection details (replace with your credentials)
-db_host = "localhost"
-db_user = "root"
-db_password = ""
-db_name = "primatips"
-table_name = "primatips_table"
-# Connect to MySQL database
-def connect_to_database():
-    global connection,cursor 
-    try:
-        connection = mysql.connector.connect(host=db_host, user=db_user, password=db_password, database=db_name)
-        cursor = connection.cursor()
-        print("Connected to MySQL database successfully!")
-    except mysql.connector.Error as err:
-        print(f"Error connecting to MySQL database: {err}")
+def search_BET():
+    search_BET1 = search_entry_BET1.get()
+    search_BETX = search_entry_BETX.get()
+    search_BET2 = search_entry_BET2.get()
+    conn = sqlite3.connect(db_name)
+    c = conn.cursor()
+    # c.execute(f"SELECT PAYS,TEAMS,BET1,BETX,BET2,SCORE,RESULTAT,PM,BUT FROM {table_name} WHERE BET1 LIKE ?", (search_BET1 + '%',))
+    # Construire la requête en fonction des valeurs des entrées
+    query = f"SELECT PAYS,TEAMS,BET1,BETX,BET2,SCORE,RESULTAT,PM,BUT FROM {table_name} WHERE 1=1"
+    parameters = []
 
-# Fetch data from MySQL table
-def fetch_data():
-    global data, cursor 
-    try:
-        # Replace "your_table_name" and "your_columns" with your actual table and columns
-        requete = f"SELECT PAYS,TEAMS,BET1,BETX,BET2,SCORE,RESULTAT,PM,BUT FROM {table_name}"
-        cursor.execute(requete)
-        data = cursor.fetchall()
-        # Fermeture du curseur
-        # cursor.close()
-        
-    except mysql.connector.Error as err:
-        print(f"Error fetching data from MySQL table: {err}")
+    if search_entry_BET1:
+        query += " AND BET1 LIKE ?"
+        parameters.append(search_BET1 + '%')
 
-# Fonction de recherche
-def rechercher():
-    global data, cursor, data1
-    try:
-        valeur_saisie = int(entry1.get())
-        # Exécution de la requête de recherche
-        requete = f"SELECT PAYS,TEAMS,BET1,BETX,BET2,SCORE,RESULTAT,PM,BUT FROM {table_name} WHERE BET1 {valeur_saisie}"
-        requete1 = f"SELECT COUNT(*) FROM {table_name} WHERE BET1 LIKE {valeur_saisie}"
-        cursor.execute(requete)
-        cursor.execute(requete1)
-        data = cursor.fetchall()
-        data1 = cursor.fetchone()
-        print(data1)
-        # Fermeture du curseur
-        # cursor.close()
+    if search_entry_BETX:
+        query += " AND BETX LIKE ?"
+        parameters.append(search_BETX + '%')
 
-    except mysql.connector.Error as err:
-        print(f"Error fetching data from MySQL table: {err}")
+    if search_entry_BET2:
+        query += " AND BET2 LIKE ?"
+        parameters.append(search_BET2 + '%')
 
+    c.execute(query, parameters)
+    rows = c.fetchall()
+    conn.close()
+    update_treeview(rows)
+
+def update_treeview(rows):
+    for i in data_tree.get_children():
+        data_tree.delete(i)
+    for row in rows:
+        data_tree.insert('', 'end', values=row)
+
+create_database()
 
 # Fonction pour créer un label avec un contour
 def create_label_with_border(parent, text, row, column):
     labelBET = tk.Label(parent, text=text, relief="solid", borderwidth=1, width=10, height=2)
     labelBET.grid(row=row, column=column, padx=1, pady=1)
     return labelBET
+
+conn = sqlite3.connect(db_name)
+c = conn.cursor()
+c.execute(f"SELECT PAYS,TEAMS,BET1,BETX,BET2,SCORE,RESULTAT,PM,BUT FROM {table_name} ORDER BY ID DESC")
+rows = c.fetchall()
+
+# Exécutez la requête SELECT pour compter le nombre de lignes
+c.execute(f"SELECT COUNT(*) FROM {table_name}")
+
+# Récupérez le résultat de la requête
+count = c.fetchone()[0]
+
+conn.close()
+
+print("Nombre de lignes avec 'Banana' dans la colonne 'name':", count)
 
 # Création de la fenêtre principale
 root = tk.Tk()
@@ -78,8 +90,8 @@ label_logo = tk.Label(frame1, image=logo, bg="#007acc")
 label_logo.pack()
 
 # Frame 2 : Labels, Entries et Button
-frame2 = tk.Frame(root, bg="#007acc", width=largeur_fenetre // 2)
-frame2.pack(padx=10, pady=10, fill="x")  # Remplir horizontalement avec un padding
+frame2 = tk.Frame(root, bg="#007acc", width=largeur_fenetre)
+frame2.pack(padx=5, pady=5, fill="x")  # Remplir horizontalement avec un padding
 # Labels
 label1 = tk.Label(frame2, text="1")
 label1.grid(row=0, column=1, padx=5, pady=5)
@@ -88,15 +100,15 @@ label2.grid(row=0, column=2, padx=5, pady=5)
 label3 = tk.Label(frame2, text="2")
 label3.grid(row=0, column=3, padx=5, pady=5)
 # Entries
-global entry1
-entry1 = tk.Entry(frame2)
-entry1.grid(row=1, column=1, padx=5, pady=5)
-entry2 = tk.Entry(frame2)
-entry2.grid(row=1, column=2, padx=5, pady=5)
-entry3 = tk.Entry(frame2)
-entry3.grid(row=1, column=3, padx=5, pady=5)
+
+search_entry_BET1 = tk.Entry(frame2)
+search_entry_BET1.grid(row=1, column=1, padx=5, pady=5)
+search_entry_BETX = tk.Entry(frame2)
+search_entry_BETX.grid(row=1, column=2, padx=5, pady=5)
+search_entry_BET2 = tk.Entry(frame2)
+search_entry_BET2.grid(row=1, column=3, padx=5, pady=5)
 # Button
-button = tk.Button(frame2, text="Valider", command=rechercher)
+button = tk.Button(frame2, text="Valider", command=search_BET)
 button.grid(row=3, columnspan=4, pady=10)
 
 # Frame 3 : Vide de couleur rouge
@@ -105,7 +117,7 @@ frame3.pack(side="left", fill="y")  # Remplir verticalement
 
 # Création des labels dans un tableau 8x7
 label_texts = [
-    "COTE", "1", "X", "2", "PM", "B/SB", "TOTAL",
+    count, "1", "X", "2", "PM", "B/SB", "TOTAL",
     "1", "Label 9", "Label 10", "Label 11", "Label 12", "Label 13", "Label 14",
     "X", "Label 16", "Label 17", "Label 18", "Label 19", "Label 20", "Label 21",
     "2", "Label 23", "Label 24", "Label 25", "Label 26", "Label 27", "Label 28",
@@ -129,7 +141,9 @@ for i in range(8):
 frame4 = tk.Frame(root)
 frame4.pack(fill="both", expand=True)  # Remplir et étendre dans toutes les directions
 # Créer un Treeview (remplacer les exemples par vos propres données)
-data_tree = ttk.Treeview(frame4, columns=("PAYS", "TEAMS", "1","X", "2", "SCORE","RESULTAT", "PM", "BUT"))
+data_tree = ttk.Treeview(frame4, columns=("PAYS", "TEAMS", "1","X", "2", "SCORE","RESULTAT", "PM", "BUT"), show='headings')
+# Use integer values for alignment
+
 data_tree.heading("PAYS", text="PAYS")
 data_tree.heading("TEAMS", text="TEAMS")
 data_tree.heading("1", text="1")
@@ -141,23 +155,17 @@ data_tree.heading("PM", text="PM")
 data_tree.heading("BUT", text="BUT")
 data_tree.pack(fill="both", expand=True)  # Remplir et étendre dans toutes les directions
 
-# Populate the Treeview with fetched data
-def populate_treeview():
-    for row in data:
-        data_tree.insert("", tk.END, values=row)
+
 
 # Ajouter une barre de défilement horizontal
 scrollbar_x = ttk.Scrollbar(frame4, orient="horizontal", command=data_tree.xview)
 scrollbar_x.pack(side="bottom", fill="x")
 data_tree.configure(xscrollcommand=scrollbar_x.set)
 
-# Main program loop
-def main():
-    connect_to_database()
-    fetch_data()
-    populate_treeview()
-    root.mainloop()
 
 
-if __name__ == "__main__":
-    main()
+
+
+update_treeview(rows)
+
+root.mainloop()
