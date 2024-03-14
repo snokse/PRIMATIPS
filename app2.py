@@ -7,7 +7,7 @@ from tkinter import ttk
 
 def create_database():
     global db_name, table_name
-    db_name = "DB/primatips4.sqlite"
+    db_name = "DB/primatips.sqlite"
     table_name = "primatips_table"
     conn = sqlite3.connect(db_name)
     c = conn.cursor()
@@ -15,32 +15,45 @@ def create_database():
     conn.close()
 
 def search_BET():
+    global count1
     search_BET1 = search_entry_BET1.get()
     search_BETX = search_entry_BETX.get()
     search_BET2 = search_entry_BET2.get()
     conn = sqlite3.connect(db_name)
+
     c = conn.cursor()
-    # c.execute(f"SELECT PAYS,TEAMS,BET1,BETX,BET2,SCORE,RESULTAT,PM,BUT FROM {table_name} WHERE BET1 LIKE ?", (search_BET1 + '%',))
-    # Construire la requête en fonction des valeurs des entrées
-    query = f"SELECT PAYS,TEAMS,BET1,BETX,BET2,SCORE,RESULTAT,PM,BUT FROM {table_name} WHERE 1=1"
+    c2 = conn.cursor()
+
+    query = f"SELECT PAYS,TEAMS,BET1,BETX,BET2,SCORE,BUT1,BUT2,RESULTAT,PM,BUT FROM {table_name} WHERE 1=1"
+    query2 =f"SELECT COUNT(*) FROM {table_name} WHERE 1=1"
     parameters = []
 
     if search_entry_BET1:
         query += " AND BET1 LIKE ?"
+        query2 += " AND BET1 LIKE ?"
         parameters.append(search_BET1 + '%')
 
     if search_entry_BETX:
         query += " AND BETX LIKE ?"
+        query2 += " AND BETX LIKE ?"
         parameters.append(search_BETX + '%')
 
     if search_entry_BET2:
         query += " AND BET2 LIKE ?"
+        query2 += " AND BET2 LIKE ?"
         parameters.append(search_BET2 + '%')
-
+    
     c.execute(query, parameters)
+    c2.execute(query2, parameters)
+
     rows = c.fetchall()
+    count1 = c2.fetchone()[0]
+
     conn.close()
     update_treeview(rows)
+
+    print("Nombre de lignes dans la colonne 'ID':", count1)
+    
 
 def update_treeview(rows):
     for i in data_tree.get_children():
@@ -58,7 +71,7 @@ def create_label_with_border(parent, text, row, column):
 
 conn = sqlite3.connect(db_name)
 c = conn.cursor()
-c.execute(f"SELECT PAYS,TEAMS,BET1,BETX,BET2,SCORE,RESULTAT,PM,BUT FROM {table_name} ORDER BY ID DESC")
+c.execute(f"SELECT PAYS,TEAMS,BET1,BETX,BET2,SCORE,BUT1,BUT2,RESULTAT,PM,BUT FROM {table_name} ORDER BY ID DESC")
 rows = c.fetchall()
 
 # Exécutez la requête SELECT pour compter le nombre de lignes
@@ -69,7 +82,7 @@ count = c.fetchone()[0]
 
 conn.close()
 
-print("Nombre de lignes avec 'Banana' dans la colonne 'name':", count)
+print("Nombre de lignes dans la colonne 'ID':", count)
 
 # Création de la fenêtre principale
 root = tk.Tk()
@@ -141,7 +154,7 @@ for i in range(8):
 frame4 = tk.Frame(root)
 frame4.pack(fill="both", expand=True)  # Remplir et étendre dans toutes les directions
 # Créer un Treeview (remplacer les exemples par vos propres données)
-data_tree = ttk.Treeview(frame4, columns=("PAYS", "TEAMS", "1","X", "2", "SCORE","RESULTAT", "PM", "BUT"), show='headings')
+data_tree = ttk.Treeview(frame4, columns=("PAYS", "TEAMS", "1","X", "2", "SCORE", "BUT1", "BUT2","RESULTAT", "PM", "BUT"), show='headings')
 # Use integer values for alignment
 
 data_tree.heading("PAYS", text="PAYS")
@@ -150,6 +163,8 @@ data_tree.heading("1", text="1")
 data_tree.heading("X", text="X")
 data_tree.heading("2", text="2")
 data_tree.heading("SCORE", text="SCORE")
+data_tree.heading("BUT1", text="BUT1")
+data_tree.heading("BUT2", text="BUT2")
 data_tree.heading("RESULTAT", text="RESULTAT")
 data_tree.heading("PM", text="PM")
 data_tree.heading("BUT", text="BUT")
@@ -161,9 +176,6 @@ data_tree.pack(fill="both", expand=True)  # Remplir et étendre dans toutes les 
 scrollbar_x = ttk.Scrollbar(frame4, orient="horizontal", command=data_tree.xview)
 scrollbar_x.pack(side="bottom", fill="x")
 data_tree.configure(xscrollcommand=scrollbar_x.set)
-
-
-
 
 
 update_treeview(rows)
